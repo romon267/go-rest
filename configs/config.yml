@@ -1,0 +1,10 @@
+port: "8000"
+
+gin-mode: "debug"
+
+db:
+  host: "localhost"
+  port: "5432"
+  username: "postgres"
+  dbname: "postgres"
+  sslmode: "disable"
