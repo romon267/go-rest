@@ -7,15 +7,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthPostgres struct {
+type AuthSql struct {
 	db *sqlx.DB
 }
 
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
-	return &AuthPostgres{db: db}
+func NewAuthSql(db *sqlx.DB) *AuthSql {
+	return &AuthSql{db: db}
 }
 
-func (r *AuthPostgres) CreateUser(user entities.User) (int, error) {
+func (r *AuthSql) CreateUser(user entities.User) (int, error) {
 	var id int
 
 	// Check if Username or Name are unique
@@ -29,7 +29,7 @@ func (r *AuthPostgres) CreateUser(user entities.User) (int, error) {
 	if existingUser.Id != 0 {
 		return 0, fmt.Errorf("username is already in use: %s", user.Username)
 	}
-	
+
 	// Insert new user
 	query = fmt.Sprintf("INSERT INTO %s (name, username, password_hash) values ($1, $2, $3) RETURNING id", usersTable)
 
@@ -46,9 +46,17 @@ func (r *AuthPostgres) CreateUser(user entities.User) (int, error) {
 	return id, nil
 }
 
+func (r *AuthSql) GetUser(username string) (entities.User, error) {
+	var user entities.User
+
+	query := fmt.Sprintf("SELECT * FROM %s WHERE username=$1", usersTable)
+	err := r.db.Get(&user, query, username)
+	fmt.Println("User", user)
+	return user, err
+}
+
 func HashPassword(password string) (string, error) {
 	hashedPBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	// TODO Not sure if it should Fatalf here, research and remove maybe
 	if err != nil {
 		return "", fmt.Errorf("Error hashing a password: %s\n", err.Error())
 	}

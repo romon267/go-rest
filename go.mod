@@ -13,6 +13,7 @@ require (
 	github.com/gin-gonic/gin v1.7.3 // indirect
 	github.com/go-ini/ini v1.39.0 // indirect
 	github.com/go-playground/validator/v10 v10.8.0 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang-migrate/migrate v3.5.4+incompatible // indirect
 	github.com/golang-migrate/migrate/v4 v4.14.1 // indirect
 	github.com/golang/lint v0.0.0-20180702182130-06c8688daad7 // indirect
